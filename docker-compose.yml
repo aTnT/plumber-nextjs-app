@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: ./plumber-nextjs-app
+      dockerfile: Dockerfile.nextjs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - r-plumber
+
+  r-plumber:
+    build:
+      context: .
+      dockerfile: Dockerfile.r-plumber
+    ports:
+      - "8000:8000"
+
+networks:
+  default:
+    name: plumber-nextjs-network

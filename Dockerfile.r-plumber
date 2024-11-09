@@ -1,0 +1,26 @@
+FROM ghcr.io/rocker-org/geospatial:latest
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    nghttp2 \
+    libnghttp2-dev \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    libsecret-1-0 \
+    libxml2-dev
+
+# Install R packages
+RUN R -e "install.packages(c('plumber', 'jsonlite'), repos='http://cran.rstudio.com/')"
+
+# Set working directory
+WORKDIR /app
+
+# Copy R Plumber files
+COPY r-plumber/*.R /app/
+
+# Expose ports for R Plumber
+EXPOSE 8000
+
+# Start R Plumber
+CMD R -e "source('/app/run_api.R')"
